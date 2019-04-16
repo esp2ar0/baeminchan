@@ -4,8 +4,6 @@ import codesquad.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
 
@@ -14,9 +12,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class MemberRequestDto {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @NotBlank(message = "NotBlank emailId")
     private String emailId;
 
@@ -24,24 +19,29 @@ public class MemberRequestDto {
     private String emailDomain;
 
     @NotBlank(message = "NotBlank password")
-    private String[] pwd;
+    private String password;
 
     @NotBlank(message = "NotBlank name")
     private String name;
 
     @NotBlank(message = "NotBlank cell")
-    private String[] cell;
+    private String cell1;
+
+    @NotBlank(message = "NotBlank cell")
+    private String cell2;
+
+    @NotBlank(message = "NotBlank cell")
+    private String cell3;
 
     public Member toEntity() {
         return Member.builder()
                 .emailId(emailId)
                 .emailDomain(emailDomain)
-                .password(passwordEncoder.encode(pwd[0]))
+                .password(password)
                 .name(name)
-                .cell1(cell[0])
-                .cell2(cell[1])
-                .cell3(cell[2])
+                .cell1(cell1)
+                .cell2(cell2)
+                .cell3(cell3)
                 .build();
     }
-
 }

@@ -15,7 +15,8 @@ function fetchManager({url, method, body, headers}) {
     fetch(url, {method, body, headers, credentials: "same-origin"})
         .then((response) => {
             if(response.status == '201') {
-                location.href = 'login.html';
+                location.replace('login');
+                alert("회원가입이 정상적으로 처리됐습니다.");
             }
             console.log(response);
     });
@@ -26,24 +27,16 @@ function registerJoinHandler(evt) {
 
     const emailId = $("#email_id").value;
     const emailDomain = $("#email_domain").value;
-    // TODO : 이메일 양식 확인..
+    if(!isValidEmail(emailId, emailDomain)) return;
 
     const password = $("#pw1").value;
-    const pw2 = $("#pw2").value;
-
-    if(password !== pw2) {
-        $("#join_check_password2").style.display = 'inline';
-        return;
-    } else {
-        $("#join_check_password2").style.display = 'none';
-    }
+    const password2 = $("#pw2").value;
+    if(!isValidPassword(password, password2)) return;
 
     const name = $("#name").value;
     const cell1 = $("#cell1").value;
     const cell2 = $("#cell2").value;
     const cell3 = $("#cell3").value;
-
-    // TODO : goNext 구현, 데이터베이스 - mysql 연동
 
     fetchManager({
         url: '/api/members',
@@ -51,4 +44,28 @@ function registerJoinHandler(evt) {
         headers: {'content-type': 'application/json'},
         body: JSON.stringify({emailId, emailDomain, password, name, cell1, cell2, cell3}),
     })
+}
+
+function isValidEmail(emailId, emailDomain) {
+    if(emailId == "" || emailDomain == "") {
+        $("#email_caution").style.display = 'inline';
+        return false;
+    }
+    $("#email_caution").style.display = 'none';
+    return true;
+}
+
+function isValidPassword(password, password2) {
+    if(password !== password2) {
+        $("#join_check_password2").style.display = 'inline';
+        return false;
+    }
+    $("#join_check_password2").style.display = 'none';
+    return true;
+}
+
+function goNext(element, length, target) {
+    if(element.value.length == length) {
+        $("#" + target).focus();
+    }
 }

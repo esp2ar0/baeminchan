@@ -30,12 +30,11 @@ public class ApiMemberController {
     public ResponseEntity<Void> create(@Valid @RequestBody MemberRequestDto memberRequestDto) {
         Member savedMember = memberService.add(memberRequestDto);
 
-        logger.info("password : '{}'", savedMember.getPassword());
-
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/"));
-        //TODO : 위에 코드 필요없는데. 어떻게 처리해줄지
+        //TODO : 리팩토링이 필요함.
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
+    //TODO : 테스트 코드 작성 후 로그인파트로 넘어가기.
 }

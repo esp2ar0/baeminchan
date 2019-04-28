@@ -13,13 +13,18 @@ function initEvents() {
 
 function fetchManager({url, method, body, headers}) {
     fetch(url, {method, body, headers, credentials: "same-origin"})
-        .then((response) => {
-            if(response.status == '201') {
-                location.replace('login');
-                alert("회원가입이 정상적으로 처리됐습니다.");
+        .then(response => {
+            if(response.status == '400') {
+                return response.json();
             }
-            console.log(response);
-    });
+            location.replace('login');
+            alert("회원가입이 정상적으로 처리됐습니다.");
+        })
+        .then(result => {
+            if(!result) return;
+            console.log(result);
+            addErrorMessage(result.errors);
+        });
 }
 
 function registerJoinHandler(evt) {
@@ -27,12 +32,8 @@ function registerJoinHandler(evt) {
 
     const emailId = $("#email_id").value;
     const emailDomain = $("#email_domain").value;
-    if(!isValidEmail(emailId, emailDomain)) return;
-
     const password = $("#pw1").value;
     const password2 = $("#pw2").value;
-    if(!isValidPassword(password, password2)) return;
-
     const name = $("#name").value;
     const cell1 = $("#cell1").value;
     const cell2 = $("#cell2").value;
@@ -42,30 +43,35 @@ function registerJoinHandler(evt) {
         url: '/api/members',
         method: 'POST',
         headers: {'content-type': 'application/json'},
-        body: JSON.stringify({emailId, emailDomain, password, name, cell1, cell2, cell3}),
+        body: JSON.stringify({emailId, emailDomain, password, password2, name, cell1, cell2, cell3}),
     })
-}
-
-function isValidEmail(emailId, emailDomain) {
-    if(emailId == "" || emailDomain == "") {
-        $("#email_caution").style.display = 'inline';
-        return false;
-    }
-    $("#email_caution").style.display = 'none';
-    return true;
-}
-
-function isValidPassword(password, password2) {
-    if(password !== password2) {
-        $("#join_check_password2").style.display = 'inline';
-        return false;
-    }
-    $("#join_check_password2").style.display = 'none';
-    return true;
 }
 
 function goNext(element, length, target) {
     if(element.value.length == length) {
         $("#" + target).focus();
+    }
+}
+
+function removeErrorMessage() {
+    $('#email_caution').textContent = "";
+    $('#password_caution').textContent = "";
+    $('#validPassword_caution').textContent = "";
+    $('#name_caution').textContent = "";
+    $('#cell_caution').textContent = "";
+}
+
+function addErrorMessage(errors) {
+    if(!errors){
+        alert(errors);
+        return;
+    }
+    removeErrorMessage();
+
+    for(let error of errors) {
+        let target = error.fieldName + '_caution';
+        if(target.startsWith('cell')) target = 'cell_caution';
+        if(target.startsWith('email')) target = 'email_caution';
+        $('#' + target).textContent = error.errorMessage;
     }
 }

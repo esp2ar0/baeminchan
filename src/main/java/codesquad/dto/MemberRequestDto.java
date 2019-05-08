@@ -43,6 +43,9 @@ public class MemberRequestDto {
 
     @AssertTrue(message = "비밀번호가 일치하지 않습니다")
     private boolean isValidPassword() {
+        if(password == null) {
+            return false;
+        }
         return password.equals(password2);
     }
 

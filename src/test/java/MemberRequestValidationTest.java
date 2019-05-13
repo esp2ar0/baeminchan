@@ -1,4 +1,4 @@
-import codesquad.dto.MemberRequestDto;
+import codesquad.domain.member.MemberRequestDto;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

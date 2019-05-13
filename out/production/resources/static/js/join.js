@@ -14,11 +14,11 @@ function initEvents() {
 function fetchManager({url, method, body, headers}) {
     fetch(url, {method, body, headers, credentials: "same-origin"})
         .then(response => {
-            if(response.status == '400') {
-                return response.json();
+            if(response.status == '201') {
+                alert("회원가입이 정상적으로 처리됐습니다.");
+                location.replace('login');
             }
-            location.replace('login');
-            alert("회원가입이 정상적으로 처리됐습니다.");
+            return response.json();
         })
         .then(result => {
             if(!result) return;

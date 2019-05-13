@@ -1,6 +1,5 @@
-package codesquad.dto;
+package codesquad.domain.member;
 
-import codesquad.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -56,13 +55,16 @@ public class MemberRequestDto {
 
     public Member toEntity() {
         return Member.builder()
-                .emailId(emailId)
-                .emailDomain(emailDomain)
+                .memberId(getMemberId())
                 .password(password)
                 .name(name)
                 .cell1(cell1)
                 .cell2(cell2)
                 .cell3(cell3)
                 .build();
+    }
+
+    private String getMemberId() {
+        return emailId + '@' + emailDomain;
     }
 }

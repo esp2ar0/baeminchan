@@ -1,6 +1,7 @@
 package codesquad.validate;
 
 
+import codesquad.exception.UnAuthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,24 @@ public class ValidationExceptionControllerAdvice {
             FieldError fieldError = (FieldError) objectError;
             response.addValidationError(new ValidationError(fieldError.getField(), getErrorMessage(fieldError)));
         }
+        return response;
+    }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ValidationErrorsResponse handleAccountNotFoundException(AccountNotFoundException exception) {
+        ValidationErrorsResponse response = new ValidationErrorsResponse();
+        response.addValidationError(new ValidationError("memberId", "아이디가 존재하지 않습니다"));
+        log.info("error message: {}", "아이디가 존재하지 않습니다");
+        return response;
+    }
+
+    @ExceptionHandler(UnAuthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ValidationErrorsResponse handleUnAuthorizedException(UnAuthorizedException exception) {
+        ValidationErrorsResponse response = new ValidationErrorsResponse();
+        response.addValidationError(new ValidationError("password", exception.getMessage()));
+        log.info("error message: {}", exception.getMessage());
         return response;
     }
 

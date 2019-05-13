@@ -1,4 +1,4 @@
-package codesquad.domain;
+package codesquad.domain.member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,10 +20,7 @@ public class Member {
     private Long id;
 
     @Column(nullable = false)
-    private String emailId;
-
-    @Column(nullable = false)
-    private String emailDomain;
+    private String memberId;
 
     @Column(nullable = false)
     private String password;
@@ -41,13 +38,16 @@ public class Member {
     private String cell3;
 
     @Builder
-    public Member(String emailId, String emailDomain, String password, String name, String cell1, String cell2, String cell3) {
-        this.emailId = emailId;
-        this.emailDomain = emailDomain;
+    public Member(String memberId, String password, String name, String cell1, String cell2, String cell3) {
+        this.memberId = memberId;
         this.password = password;
         this.name = name;
         this.cell1 = cell1;
         this.cell2 = cell2;
         this.cell3 = cell3;
+    }
+
+    public boolean match(String password) {
+        return this.password.equals(password);
     }
 }

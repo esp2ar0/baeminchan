@@ -35,6 +35,7 @@ public class BasicAuthInterceptor extends HandlerInterceptorAdapter {
         log.debug("memberId : {}", values[0]);
         log.debug("password : {}", values[1]);
 
+
         Member member = memberService.login(new MemberLoginDto(values[0], values[1]));
         log.debug("Login Success : {}", member);
         request.getSession().setAttribute(HttpSessionUtils.MEMBER_SESSION_KEY, member);

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -20,5 +21,19 @@ public class MemberLoginDto {
     public MemberLoginDto(String memberId, String password) {
         this.memberId = memberId;
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MemberLoginDto that = (MemberLoginDto) o;
+        return Objects.equals(memberId, that.memberId) &&
+                Objects.equals(password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(memberId, password);
     }
 }

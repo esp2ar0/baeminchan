@@ -46,8 +46,4 @@ public class Member {
         this.cell2 = cell2;
         this.cell3 = cell3;
     }
-
-    public boolean match(String password) {
-        return this.password.equals(password);
-    }
 }

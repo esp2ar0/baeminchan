@@ -1,3 +1,5 @@
+package codesquad.domain;
+
 import codesquad.domain.member.MemberRequestDto;
 import org.junit.Before;
 import org.junit.BeforeClass;

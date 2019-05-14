@@ -1,6 +1,5 @@
 package codesquad.web;
 
-import codesquad.domain.member.Member;
 import codesquad.domain.member.MemberLoginDto;
 import codesquad.domain.member.MemberRequestDto;
 import codesquad.service.MemberService;
@@ -32,11 +31,10 @@ public class ApiMemberController {
 
     @PostMapping("")
     public ResponseEntity<Void> create(@Valid @RequestBody MemberRequestDto memberRequestDto) {
-        Member savedMember = memberService.add(memberRequestDto);
+        memberService.add(memberRequestDto);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/"));
-        //TODO : 리팩토링이 필요함.
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 

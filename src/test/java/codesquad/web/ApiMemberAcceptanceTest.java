@@ -11,9 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ApiMemberAcceptanceTest extends AcceptanceTest {
 
-    public MemberRequestDto defaultMemberRequestDto() {
+    public MemberRequestDto defaultMemberRequestDto(String emailId) {
         MemberRequestDto memberRequestDto = new MemberRequestDto();
-        memberRequestDto.setEmailId("esp2ar0");
+        memberRequestDto.setEmailId(emailId);
         memberRequestDto.setEmailDomain("gmail.com");
         memberRequestDto.setPassword("q12345678");
         memberRequestDto.setPassword2("q12345678");
@@ -24,24 +24,18 @@ public class ApiMemberAcceptanceTest extends AcceptanceTest {
         return memberRequestDto;
     }
 
-    public MemberLoginDto defaultMemberLoginDto() {
-        MemberLoginDto memberLoginDto = new MemberLoginDto();
-        memberLoginDto.setMemberId("esp2ar0@gmail.com");
-        memberLoginDto.setPassword("q12345678");
-        return memberLoginDto;
-    }
-
     @Test
     public void create() {
-        String location = createResource("/api/members", defaultMemberRequestDto());
+        String location = createResource("/api/members", defaultMemberRequestDto("chicken"));
         assertThat(location).isEqualTo("/");
     }
 
     @Test
     public void login() {
-        createResource("/api/members", defaultMemberRequestDto());
+        createResource("/api/members", defaultMemberRequestDto("burrito"));
 
-        ResponseEntity<Void> response = template().postForEntity("/api/members/login", defaultMemberLoginDto(), Void.class);
+        ResponseEntity<Void> response = template().postForEntity("/api/members/login",
+                new MemberLoginDto("burrito@gmail.com", "q12345678"), Void.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHeaders().getLocation().getPath()).isEqualTo("/");
